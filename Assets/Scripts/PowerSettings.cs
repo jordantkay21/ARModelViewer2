@@ -5,6 +5,7 @@ using UnityEngine;
 public class PowerSettings : MonoBehaviour
 {
     public Material targetMaterial;
+    public ParticleSystem[] flameBoosters;
     
 
     private Color originalEmissionColor;
@@ -16,9 +17,14 @@ public class PowerSettings : MonoBehaviour
     {
             //cache the gems initial emission color
             originalEmissionColor = targetMaterial.GetColor("_EmissionColor");
-
             //set the emission color to black
             targetMaterial.SetColor("_EmissionColor", Color.black);
+
+        //turn off flame boosters
+        foreach(ParticleSystem flame in flameBoosters)
+        {
+            flame.Stop();
+        }
     }
 
     public void ChangeEmission()
@@ -30,8 +36,20 @@ public class PowerSettings : MonoBehaviour
 
 
         if (isEmitting)
+        {
             targetMaterial.SetColor("_EmissionColor", originalEmissionColor);
+            foreach (ParticleSystem flame in flameBoosters)
+            {
+                flame.Play();
+            }
+        }
         else
+        {
             targetMaterial.SetColor("_EmissionColor", Color.black);
+            foreach (ParticleSystem flame in flameBoosters)
+            {
+                flame.Stop();
+            }
+        }
     }
 }
